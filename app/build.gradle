@@ -60,9 +60,6 @@ android {
         }
     }
 
-    lintOptions {
-        disable 'MissingTranslation'
-    }
     buildFeatures {
         viewBinding true
     }
@@ -75,12 +72,12 @@ android {
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
-
     packagingOptions {
-        // Exclude unneeded files added by libraries
-        exclude 'LICENSE_OFL'
-        exclude 'LICENSE_UNICODE'
+        resources {
+            excludes += ['LICENSE_OFL', 'LICENSE_UNICODE']
+        }
     }
+
     bundle {
         language {
             // bundle all languages in every apk so the dynamic language switching works
@@ -90,6 +87,10 @@ android {
     kotlinOptions {
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
+    lint {
+        disable 'MissingTranslation'
+    }
+    namespace 'com.keylesspalace.tusky'
 }
 
 // library versions are in PROJECT_ROOT/gradle/libs.versions.toml
