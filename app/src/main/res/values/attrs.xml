@@ -8,6 +8,12 @@
         <attr name="description" format="string|reference" />
     </declare-styleable>
 
+    <declare-styleable name="MathJaxView">
+        <attr name="text" format="string"/>
+        <attr name="textColor" format="string"/>
+        <attr name="mathBackgroundColor" format="string"/>
+    </declare-styleable>
+
     <!--Themed Attributes-->
     <attr name="colorBackgroundAccent" format="reference|color" />
     <attr name="colorBackgroundHighlight" format="reference|color" />

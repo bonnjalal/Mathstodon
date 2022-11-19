@@ -15,7 +15,11 @@
 
 package com.keylesspalace.tusky.components.conversation;
 
+import static android.text.Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL;
+
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
@@ -175,14 +179,41 @@ public class ConversationViewHolder extends StatusBaseViewHolder {
             contentCollapseButton.setVisibility(View.VISIBLE);
             if (collapsed) {
                 contentCollapseButton.setText(R.string.post_content_warning_show_more);
-                content.setFilters(COLLAPSE_INPUT_FILTER);
+                if (spannableContent != null){
+                    spannableContent.setFilters(COLLAPSE_INPUT_FILTER);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        content.setText(Html.toHtml(spannableContent, TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+//                    Log.e("Bonnjalal : ", "html code ${view.text}")
+                    }else {
+                        content.setText(Html.toHtml(spannableContent));
+                    }
+                }
+//                content.setFilters(COLLAPSE_INPUT_FILTER);
             } else {
                 contentCollapseButton.setText(R.string.post_content_warning_show_less);
-                content.setFilters(NO_INPUT_FILTER);
+                if (spannableContent != null){
+                    spannableContent.setFilters(NO_INPUT_FILTER);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        content.setText(Html.toHtml(spannableContent, TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+//                    Log.e("Bonnjalal : ", "html code ${view.text}")
+                    }else {
+                        content.setText(Html.toHtml(spannableContent));
+                    }
+                }
+//                content.setFilters(NO_INPUT_FILTER);
             }
         } else {
             contentCollapseButton.setVisibility(View.GONE);
-            content.setFilters(NO_INPUT_FILTER);
+            if (spannableContent != null){
+                spannableContent.setFilters(NO_INPUT_FILTER);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    content.setText(Html.toHtml(spannableContent, TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+//                    Log.e("Bonnjalal : ", "html code ${view.text}")
+                }else {
+                    content.setText(Html.toHtml(spannableContent));
+                }
+            }
+//            content.setFilters(NO_INPUT_FILTER);
         }
     }
 }

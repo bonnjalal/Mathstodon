@@ -20,6 +20,7 @@ import com.keylesspalace.tusky.entity.SearchResult
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.entity.TimelineAccount
 import com.keylesspalace.tusky.network.MastodonApi
+import com.keylesspalace.tusky.util.urlType
 import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
@@ -161,7 +162,9 @@ class BottomSheetActivityTest {
                     arrayOf("https://misskey.foo.bar/notes/NYAN123", false),
                     arrayOf("https://misskey.foo.bar/notes/meow123/", false),
                     arrayOf("https://pixelfed.social/p/connyduck/391263492998670833", true),
-                    arrayOf("https://pixelfed.social/connyduck", true)
+                    arrayOf("https://pixelfed.social/connyduck", true),
+                    arrayOf("https://mathstodon.xyz/@bonnjalal", true)
+
                 )
             }
         }
@@ -172,6 +175,27 @@ class BottomSheetActivityTest {
         }
     }
 
+    @RunWith(Parameterized::class)
+    class urlTypeTests(private val url: String, private val expectedResult: String) {
+        companion object {
+            @Parameterized.Parameters(name = "match_{0}")
+            @JvmStatic
+            fun data(): Iterable<Any> {
+                return listOf(
+                    arrayOf("https://mastodon.foo.bar/@User", "url"),
+                    arrayOf("https://www.bonnjalal.com/tag/jalal", "tag"),
+                    arrayOf("https://www.bonnjalal.com/thread/jalal", "thread"),
+                    arrayOf("https://www.bonnjalal.com/account/jalal", "account"),
+
+                )
+            }
+        }
+
+        @Test
+        fun test() {
+            assertEquals(expectedResult, urlType(url))
+        }
+    }
     @Test
     fun beginEndSearch_setIsSearching_isSearchingAfterBegin() {
         activity.onBeginSearch("https://mastodon.foo.bar/@User")

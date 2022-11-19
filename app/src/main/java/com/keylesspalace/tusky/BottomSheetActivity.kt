@@ -116,6 +116,7 @@ abstract class BottomSheetActivity : BaseActivity() {
 
     open fun viewAccount(id: String) {
         val intent = AccountActivity.getIntent(this, id)
+//        startActivity(intent)
         startActivityWithSlideInAnimation(intent)
     }
 

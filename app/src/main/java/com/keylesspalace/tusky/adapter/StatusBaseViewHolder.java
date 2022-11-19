@@ -1,14 +1,24 @@
 package com.keylesspalace.tusky.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -52,6 +62,7 @@ import com.keylesspalace.tusky.util.LinkHelper;
 import com.keylesspalace.tusky.util.StatusDisplayOptions;
 import com.keylesspalace.tusky.util.ThemeUtils;
 import com.keylesspalace.tusky.util.TimestampUtils;
+import com.keylesspalace.tusky.view.MathJaxView;
 import com.keylesspalace.tusky.view.MediaPreviewImageView;
 import com.keylesspalace.tusky.viewdata.PollOptionViewData;
 import com.keylesspalace.tusky.viewdata.PollViewData;
@@ -92,7 +103,9 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
 
     public ImageView avatar;
     public TextView timestampInfo;
-    public TextView content;
+//    public TextView content;
+    public SpannableStringBuilder spannableContent;
+    public MathJaxView content;
     public TextView contentWarningDescription;
 
     private RecyclerView pollOptions;
@@ -253,8 +266,9 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                                 StatusDisplayOptions statusDisplayOptions,
                                 final StatusActionListener listener) {
         if (expanded) {
+            int position = getBindingAdapterPosition();
             CharSequence emojifiedText = CustomEmojiHelper.emojify(content, emojis, this.content, statusDisplayOptions.animateEmojis());
-            LinkHelper.setClickableText(this.content, emojifiedText, mentions, tags, listener);
+            spannableContent = LinkHelper.setClickableText(this.content,position ,  emojifiedText, mentions, tags, listener);
             for (int i = 0; i < mediaLabels.length; ++i) {
                 updateMediaLabel(i, sensitive, expanded);
             }
@@ -602,6 +616,10 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         sensitiveMediaShow.setVisibility(View.GONE);
     }
 
+    Boolean changedUrl = false;
+    String currentUrl = null;
+//    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility")
     protected void setupButtons(final StatusActionListener listener,
                                 final String accountId,
                                 final String statusContent,
@@ -667,6 +685,9 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 listener.onMore(v, position);
             }
         });
+
+        content.addJavascriptInterface(listener);
+
         /* Even though the content TextView is a child of the container, it won't respond to clicks
          * if it contains URLSpans without also setting its listener. The surrounding spans will
          * just eat the clicks instead of deferring to the parent listener, but WILL respond to a
@@ -677,8 +698,116 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 listener.onViewThread(position);
             }
         };
-        content.setOnClickListener(viewThreadListener);
+//        content.setOnClickListener(viewThreadListener);
         itemView.setOnClickListener(viewThreadListener);
+
+
+        final String[] urls = new String[1];
+        content.setWebViewClient(new WebViewClient() {
+
+            /*@Override
+            public void onPageFinished(WebView view, String url) {
+                changedUrl = false;
+                currentUrl = content.getUrl();
+            }*/
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url){
+//                Log.e("Bonnjalal ", "url : "+ url);
+
+                if(true && !url.equals(currentUrl)) {
+                    String urlType = LinkHelper.urlType(url);
+                    switch (urlType) {
+                        case "tag":
+                            String tag = url.replace("https://www.bonnjalal.com/tag/", "");
+                            listener.onViewTag(tag);
+                            Log.e("Bonnjalal ", "url tag : " + url);
+                            break;
+                        case "account":
+                            String id = url.replace("https://www.bonnjalal.com/account/", "");
+                            listener.onViewAccount(id);
+                            Log.e("Bonnjalal ", "url account : " + url);
+                            break;
+                        case "thread":
+                            int position = getBindingAdapterPosition();
+                            if (position != RecyclerView.NO_POSITION) {
+                                listener.onViewThread(position);
+                            }
+                            Log.e("Bonnjalal ", "url thread: " + url);
+                            break;
+                        default:
+                            listener.onViewUrl(url);
+                            Log.e("Bonnjalal ", "url other url: " + url);
+                            break;
+                    }
+                    changedUrl = false;
+                    // page has been clicked
+//                    return true;
+                }
+                return true;
+            }
+        });
+
+        final Boolean[] mMoveOccured = new Boolean[1];
+        final float[] mDownPosX = new float[1];
+        final float[] mDownPosY = new float[1];
+
+        final float MOVE_THRESHOLD_DP = 400;// * getResources().getDisplayMetrics().density;
+
+        /*content.setOnTouchListener((v, event) -> {
+            final int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    mMoveOccured[0] = false;
+                    mDownPosX[0] = event.getX();
+                    mDownPosY[0] = event.getY();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if (!mMoveOccured[0]) {
+                        changedUrl = true;
+                        Toast.makeText(v.getContext(), "WebView pressed", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (Math.abs(event.getX() - mDownPosX[0]) > MOVE_THRESHOLD_DP || Math.abs(event.getY() - mDownPosY[0]) > MOVE_THRESHOLD_DP) {
+                        mMoveOccured[0] = true;
+                    }
+                    break;
+            }
+            return false;
+        });*/
+//        content.loadUrl("javascript:openHashtag('"+getBindingAdapterPosition()+"')");
+        /*content.setOnTouchListener(new View.OnTouchListener() {
+
+
+            private final static long MAX_TOUCH_DURATION = 100;
+            long m_DownTime = 0 ;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getAction()) {
+
+                    case MotionEvent.ACTION_DOWN:
+                        m_DownTime = event.getEventTime(); //init time
+
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        if(event.getEventTime() - m_DownTime <= MAX_TOUCH_DURATION){
+                            int position = getBindingAdapterPosition();
+                            if (position != RecyclerView.NO_POSITION) {
+                                listener.onViewThread(position);
+                            }
+                        }
+                        break;
+
+                    default:
+                        break; //No-Op
+
+                }
+                return false;
+            }
+        });*/
     }
 
     private void showConfirmReblogDialog(StatusActionListener listener,
@@ -724,6 +853,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                                 @NonNull final StatusActionListener listener,
                                 @NonNull StatusDisplayOptions statusDisplayOptions,
                                 @Nullable Object payloads) {
+
         if (payloads == null) {
             Status actionable = status.getActionable();
             setDisplayName(actionable.getAccount().getName(), actionable.getAccount().getEmojis(), statusDisplayOptions);
@@ -1168,4 +1298,5 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         bookmarkButton.setVisibility(visibility);
         moreButton.setVisibility(visibility);
     }
+
 }

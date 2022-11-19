@@ -15,8 +15,15 @@
 
 package com.keylesspalace.tusky.adapter;
 
+import static android.text.Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL;
+
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
 import android.text.InputFilter;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +31,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.keylesspalace.tusky.R;
@@ -120,14 +128,41 @@ public class StatusViewHolder extends StatusBaseViewHolder {
             contentCollapseButton.setVisibility(View.VISIBLE);
             if (status.isCollapsed()) {
                 contentCollapseButton.setText(R.string.post_content_warning_show_more);
-                content.setFilters(COLLAPSE_INPUT_FILTER);
+                if (spannableContent != null){
+                    spannableContent.setFilters(COLLAPSE_INPUT_FILTER);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        content.setText(Html.toHtml(spannableContent, TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+//                    Log.e("Bonnjalal : ", "html code ${view.text}")
+                    }else {
+                        content.setText(Html.toHtml(spannableContent));
+                    }
+                }
+//                content.setFilters(COLLAPSE_INPUT_FILTER);
             } else {
                 contentCollapseButton.setText(R.string.post_content_warning_show_less);
-                content.setFilters(NO_INPUT_FILTER);
+                if (spannableContent != null){
+                    spannableContent.setFilters(NO_INPUT_FILTER);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        content.setText(Html.toHtml(spannableContent, TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+//                    Log.e("Bonnjalal : ", "html code ${view.text}")
+                    }else {
+                        content.setText(Html.toHtml(spannableContent));
+                    }
+                }
+//                content.setFilters(NO_INPUT_FILTER);
             }
         } else {
             contentCollapseButton.setVisibility(View.GONE);
-            content.setFilters(NO_INPUT_FILTER);
+            if (spannableContent != null){
+                spannableContent.setFilters(NO_INPUT_FILTER);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    content.setText(Html.toHtml(spannableContent, TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+//                    Log.e("Bonnjalal : ", "html code ${view.text}")
+                }else {
+                    content.setText(Html.toHtml(spannableContent));
+                }
+            }
+//            content.setFilters(NO_INPUT_FILTER);
         }
     }
 
