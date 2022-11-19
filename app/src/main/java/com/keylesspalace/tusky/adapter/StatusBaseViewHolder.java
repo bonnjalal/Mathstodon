@@ -715,35 +715,36 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             public boolean shouldOverrideUrlLoading(WebView view, String url){
 //                Log.e("Bonnjalal ", "url : "+ url);
 
-                if(true && !url.equals(currentUrl)) {
-                    String urlType = LinkHelper.urlType(url);
-                    switch (urlType) {
-                        case "tag":
-                            String tag = url.replace("https://www.bonnjalal.com/tag/", "");
-                            listener.onViewTag(tag);
-                            Log.e("Bonnjalal ", "url tag : " + url);
-                            break;
-                        case "account":
-                            String id = url.replace("https://www.bonnjalal.com/account/", "");
-                            listener.onViewAccount(id);
-                            Log.e("Bonnjalal ", "url account : " + url);
-                            break;
-                        case "thread":
-                            int position = getBindingAdapterPosition();
-                            if (position != RecyclerView.NO_POSITION) {
-                                listener.onViewThread(position);
-                            }
-                            Log.e("Bonnjalal ", "url thread: " + url);
-                            break;
-                        default:
-                            listener.onViewUrl(url);
-                            Log.e("Bonnjalal ", "url other url: " + url);
-                            break;
-                    }
+                String urlType = LinkHelper.urlType(url);
+                switch (urlType) {
+                    case "tag":
+                        String tag = url.replace("https://www.bonnjalal.com/tag/", "");
+                        listener.onViewTag(tag);
+                        Log.e("Bonnjalal ", "url tag : " + url);
+                        break;
+                    case "account":
+                        String id = url.replace("https://www.bonnjalal.com/account/", "");
+                        listener.onViewAccount(id);
+                        Log.e("Bonnjalal ", "url account : " + url);
+                        break;
+                    case "thread":
+                        int position = getBindingAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onViewThread(position);
+                        }
+                        Log.e("Bonnjalal ", "url thread: " + url);
+                        break;
+                    default:
+                        listener.onViewUrl(url);
+                        Log.e("Bonnjalal ", "url other url: " + url);
+                        break;
+                }
+                /*if(true && !url.equals(currentUrl)) {
+
                     changedUrl = false;
                     // page has been clicked
 //                    return true;
-                }
+                }*/
                 return true;
             }
         });

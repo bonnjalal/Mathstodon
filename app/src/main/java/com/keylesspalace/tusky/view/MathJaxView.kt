@@ -129,18 +129,30 @@ class MathJaxView : WebView {
                 "</script>"+
                 "<style type=\"text/css\">body{color: ${textColor!!.lowercase()}; }</style>"+
                 "<style type=\"text/css\">\n" +
-                ".int {\n" +
-                "  position:relative;" +
-                "  z-index:999;" +
-                "}"+
-                ".ext {\n" +
-                "  position:absolute;" +
-                "  top:0;" +
-                "  left:0;" +
-                "  right:0;" +
-                "  bottom:0;" +
-                "  z-index:0;" +
+                "a:link {\n" +
+                "  color:SteelBlue;" +
+                "  text-decoration: none;" +
                 "}\n" +
+                "a:visited {\n" +
+                "  color:SteelBlue;" +
+                "  text-decoration: none;" +
+                "}\n" +
+                "a:hover {\n" +
+                "  color:RoyalBlue;" +
+                "  text-decoration: none;" +
+                "}"+
+//                ".int {\n" +
+//                "  position:relative;" +
+//                "  z-index:999;" +
+//                "}"+
+//                ".ext {\n" +
+//                "  position:absolute;" +
+//                "  top:0;" +
+//                "  left:0;" +
+//                "  right:0;" +
+//                "  bottom:0;" +
+//                "  z-index:0;" +
+//                "}\n" +
 //                "      .link {" +
 //                "        position: absolute;" +
 //                "        width: 100%;" +
