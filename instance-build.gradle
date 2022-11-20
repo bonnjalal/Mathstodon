@@ -4,7 +4,7 @@ Note: Publishing a custom build on Google Play may violate the Google Play devel
  */
 
 // The app name
-ext.APP_NAME = "Tusky"
+ext.APP_NAME = "Mathstodon"
 
 // The application id. Must be unique, e.g. based on your domain
 ext.APP_ID = "com.keylesspalace.tusky"
@@ -16,4 +16,4 @@ ext.CUSTOM_LOGO_URL = ""
 ext.CUSTOM_INSTANCE = ""
 
 // link to your support account. Will be linked on the about page when not empty.
-ext.SUPPORT_ACCOUNT_URL = "https://mastodon.social/@Tusky"
+ext.SUPPORT_ACCOUNT_URL = "https://mathstodon.xyz/@bonnjalal"
