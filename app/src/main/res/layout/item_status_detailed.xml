@@ -131,23 +131,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/status_content_warning_button"
         tools:text="Status content. Can be pretty long. " />
-    <!--<TextView
-        android:id="@+id/status_content"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:focusable="true"
-        android:hyphenationFrequency="full"
-        android:importantForAccessibility="no"
-        android:lineSpacingMultiplier="1.1"
-        android:textIsSelectable="true"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="?attr/status_text_large"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status_content_warning_button"
-        tools:text="Status content. Can be pretty long. " />-->
 
     <LinearLayout
         android:id="@+id/status_card_view"

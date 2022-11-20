@@ -676,4 +676,11 @@
     <string name="instance_rule_info">By logging in you agree to the rules of %s.</string>
     <string name="instance_rule_title">%s rules</string>
 
+<!--    Math Jax mathstodon-->
+
+    <string name="preview_compose_btn">preview</string>
+    <string name="edit_compose_btn">edit</string>
+    <string name="action_math_function">MathJax function</string>
+    <string name="action_inline_math">Inline math</string>
+    <string name="action_display_math">Display math</string>
 </resources>

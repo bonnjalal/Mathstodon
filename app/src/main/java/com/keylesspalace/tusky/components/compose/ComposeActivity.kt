@@ -50,6 +50,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.text.toHtml
 import androidx.core.view.ContentInfoCompat
 import androidx.core.view.OnReceiveContentListener
 import androidx.core.view.isGone
@@ -128,6 +129,7 @@ class ComposeActivity :
 
     private lateinit var composeOptionsBehavior: BottomSheetBehavior<*>
     private lateinit var addMediaBehavior: BottomSheetBehavior<*>
+    private lateinit var addMathFunBehavior: BottomSheetBehavior<*>
     private lateinit var emojiBehavior: BottomSheetBehavior<*>
     private lateinit var scheduleBehavior: BottomSheetBehavior<*>
 
@@ -480,6 +482,7 @@ class ComposeActivity :
         addMediaBehavior = BottomSheetBehavior.from(binding.addMediaBottomSheet)
         scheduleBehavior = BottomSheetBehavior.from(binding.composeScheduleView)
         emojiBehavior = BottomSheetBehavior.from(binding.emojiView)
+        addMathFunBehavior = BottomSheetBehavior.from(binding.addMathFunBottomSheet)
 
         enableButton(binding.composeEmojiButton, clickable = false, colorActive = false)
 
@@ -495,6 +498,26 @@ class ComposeActivity :
         binding.composeScheduleView.setListener(this)
         binding.atButton.setOnClickListener { atButtonClicked() }
         binding.hashButton.setOnClickListener { hashButtonClicked() }
+
+        // setUp for mathjax
+        binding.composeMathButton.setOnClickListener { openMathFunList() }
+        binding.composePreviewButton.setOnClickListener {
+            if (binding.composeEditField.isVisible){
+                val editText = binding.composeEditField.text.toHtml()
+                Log.e("Bonnjalal Editext", editText)
+                binding.composeEditField.visibility = View.GONE
+                binding.composePreviewMath.visibility = View.VISIBLE
+                binding.composePreviewMath.text = "<body> $editText"
+                binding.composePreviewButton.text = getString(R.string.edit_compose_btn)
+            }else{
+                binding.composeEditField.visibility = View.VISIBLE
+                binding.composePreviewMath.visibility = View.GONE
+                binding.composePreviewButton.text = getString(R.string.preview_compose_btn)
+            }
+        }
+        binding.actionInlineMath.setOnClickListener { onInlineMathFun() }
+        binding.actionDisplayMath.setOnClickListener { onDisplayMathFun() }
+        /// math jax end
 
         val textColor = ThemeUtils.getColor(this, android.R.attr.textColorTertiary)
 
@@ -518,12 +541,14 @@ class ComposeActivity :
                     if (composeOptionsBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
                         addMediaBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
                         emojiBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
-                        scheduleBehavior.state == BottomSheetBehavior.STATE_EXPANDED
+                        scheduleBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
+                        addMathFunBehavior.state == BottomSheetBehavior.STATE_EXPANDED
                     ) {
                         composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                         addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                         emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                         scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                        addMathFunBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                         return
                     }
 
@@ -743,6 +768,7 @@ class ComposeActivity :
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             scheduleBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+            addMathFunBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         } else {
             composeOptionsBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
         }
@@ -762,6 +788,7 @@ class ComposeActivity :
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             emojiBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+            addMathFunBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         } else {
             scheduleBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
         }
@@ -778,6 +805,7 @@ class ComposeActivity :
                     composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                     addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                     scheduleBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+                    addMathFunBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 } else {
                     emojiBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
                 }
@@ -791,8 +819,21 @@ class ComposeActivity :
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             scheduleBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+            addMathFunBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         } else {
             addMediaBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+        }
+    }
+
+    private fun openMathFunList() {
+        if (addMathFunBehavior.state == BottomSheetBehavior.STATE_HIDDEN || addMathFunBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+            addMathFunBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        } else {
+            addMathFunBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
         }
     }
 
@@ -820,6 +861,18 @@ class ComposeActivity :
         addMediaBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
+    private fun onInlineMathFun() {
+        addMathFunBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        prependSelectedWordsWith("\\(  \\)")
+        val position = binding.composeEditField.length()
+        binding.composeEditField.setSelection(position - 3)
+    }
+    private fun onDisplayMathFun() {
+        addMathFunBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        prependSelectedWordsWith("\\[  \\]")
+        val position = binding.composeEditField.length()
+        binding.composeEditField.setSelection(position - 3)
+    }
     private fun openPollDialog() = lifecycleScope.launch {
         addMediaBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         val instanceParams = viewModel.instanceInfo.first()

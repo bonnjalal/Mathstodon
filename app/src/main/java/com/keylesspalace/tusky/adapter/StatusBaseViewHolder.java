@@ -2,19 +2,13 @@ package com.keylesspalace.tusky.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -686,7 +680,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        content.addJavascriptInterface(listener);
+//        content.addJavascriptInterface(listener);
 
         /* Even though the content TextView is a child of the container, it won't respond to clicks
          * if it contains URLSpans without also setting its listener. The surrounding spans will
@@ -702,7 +696,6 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(viewThreadListener);
 
 
-        final String[] urls = new String[1];
         content.setWebViewClient(new WebViewClient() {
 
             /*@Override
@@ -720,95 +713,25 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                     case "tag":
                         String tag = url.replace("https://www.bonnjalal.com/tag/", "");
                         listener.onViewTag(tag);
-                        Log.e("Bonnjalal ", "url tag : " + url);
                         break;
                     case "account":
                         String id = url.replace("https://www.bonnjalal.com/account/", "");
                         listener.onViewAccount(id);
-                        Log.e("Bonnjalal ", "url account : " + url);
                         break;
                     case "thread":
                         int position = getBindingAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
                             listener.onViewThread(position);
                         }
-                        Log.e("Bonnjalal ", "url thread: " + url);
                         break;
                     default:
                         listener.onViewUrl(url);
-                        Log.e("Bonnjalal ", "url other url: " + url);
                         break;
                 }
-                /*if(true && !url.equals(currentUrl)) {
-
-                    changedUrl = false;
-                    // page has been clicked
-//                    return true;
-                }*/
                 return true;
             }
         });
 
-        final Boolean[] mMoveOccured = new Boolean[1];
-        final float[] mDownPosX = new float[1];
-        final float[] mDownPosY = new float[1];
-
-        final float MOVE_THRESHOLD_DP = 400;// * getResources().getDisplayMetrics().density;
-
-        /*content.setOnTouchListener((v, event) -> {
-            final int action = event.getAction();
-            switch (action) {
-                case MotionEvent.ACTION_DOWN:
-                    mMoveOccured[0] = false;
-                    mDownPosX[0] = event.getX();
-                    mDownPosY[0] = event.getY();
-                    break;
-                case MotionEvent.ACTION_UP:
-                    if (!mMoveOccured[0]) {
-                        changedUrl = true;
-                        Toast.makeText(v.getContext(), "WebView pressed", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    if (Math.abs(event.getX() - mDownPosX[0]) > MOVE_THRESHOLD_DP || Math.abs(event.getY() - mDownPosY[0]) > MOVE_THRESHOLD_DP) {
-                        mMoveOccured[0] = true;
-                    }
-                    break;
-            }
-            return false;
-        });*/
-//        content.loadUrl("javascript:openHashtag('"+getBindingAdapterPosition()+"')");
-        /*content.setOnTouchListener(new View.OnTouchListener() {
-
-
-            private final static long MAX_TOUCH_DURATION = 100;
-            long m_DownTime = 0 ;
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                switch (event.getAction()) {
-
-                    case MotionEvent.ACTION_DOWN:
-                        m_DownTime = event.getEventTime(); //init time
-
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        if(event.getEventTime() - m_DownTime <= MAX_TOUCH_DURATION){
-                            int position = getBindingAdapterPosition();
-                            if (position != RecyclerView.NO_POSITION) {
-                                listener.onViewThread(position);
-                            }
-                        }
-                        break;
-
-                    default:
-                        break; //No-Op
-
-                }
-                return false;
-            }
-        });*/
     }
 
     private void showConfirmReblogDialog(StatusActionListener listener,

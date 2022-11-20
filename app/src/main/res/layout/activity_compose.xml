@@ -22,6 +22,15 @@
             tools:ignore="ContentDescription" />
         <!--content description will be set in code -->
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/composePreviewButton"
+            android:text="@string/preview_compose_btn"
+            style="@style/TuskyButton.TextButton"
+            android:layout_width="@dimen/toot_button_width"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textSize="?attr/status_text_medium" />
+
         <Spinner
             android:id="@+id/composePostLanguageButton"
             style="@style/TuskyImageButton"
@@ -160,6 +169,17 @@
                 android:textColorHint="?android:attr/textColorTertiary"
                 android:textSize="?attr/status_text_large" />
 
+            <com.keylesspalace.tusky.view.MathJaxView
+                android:id="@+id/composePreviewMath"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:paddingLeft="16dp"
+                android:paddingTop="8dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
+                android:visibility="gone"
+                />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/composeMediaPreviewBar"
                 android:layout_width="match_parent"
@@ -221,7 +241,40 @@
             android:text="@string/action_add_poll"
             android:textSize="?attr/status_text_medium" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/addMathFunBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        android:elevation="12dp"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="52dp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
+        <TextView
+            android:id="@+id/actionInlineMath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:text="@string/action_inline_math"
+            android:textSize="?attr/status_text_medium" />
+
+        <TextView
+            android:id="@+id/actionDisplayMath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:text="@string/action_display_math"
+            android:textSize="?attr/status_text_medium" />
+
+    </LinearLayout>
     <com.keylesspalace.tusky.view.EmojiPicker
         android:id="@+id/emojiView"
         android:layout_width="match_parent"
@@ -297,9 +350,9 @@
             android:layout_marginEnd="4dp"
             android:contentDescription="@string/action_toggle_visibility"
             android:padding="4dp"
-            android:tint="?android:attr/textColorTertiary"
             app:tooltipText="@string/action_toggle_visibility"
-            tools:src="@drawable/ic_public_24dp" />
+            tools:src="@drawable/ic_public_24dp"
+            app:tint="?android:attr/textColorTertiary" />
 
         <ImageButton
             android:id="@+id/composeHideMediaButton"
@@ -343,6 +396,17 @@
             android:contentDescription="@string/action_schedule_post"
             android:padding="4dp"
             app:srcCompat="@drawable/ic_access_time"
+            app:tooltipText="@string/action_schedule_post" />
+
+        <ImageButton
+            android:id="@+id/composeMathButton"
+            style="@style/TuskyImageButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/action_schedule_post"
+            android:padding="4dp"
+            app:srcCompat="@drawable/ic_functions"
             app:tooltipText="@string/action_schedule_post" />
 
         <Space

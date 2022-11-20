@@ -1,6 +1,6 @@
 /*
-* This class created by quantaDot https://github.com/quantaDot/MathRenderer/blob/main/MathRendererLib/src/main/java/com/qdot/mathrendererlib/MathRenderView.kt
-* And updated by bonnjalal  https://github.com/bonnjalal
+* based on  quantaDot https://github.com/quantaDot/MathRenderer/blob/main/MathRendererLib/src/main/java/com/qdot/mathrendererlib/MathRenderView.kt
+* this class created by bonnjalal  https://github.com/bonnjalal 17/11/2022
 */
 package com.keylesspalace.tusky.view
 
@@ -38,9 +38,7 @@ class MathJaxView : WebView {
         val theme: Resources.Theme = context.theme
         theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true)
         @ColorInt val color = typedValue.data
-//        val colorInt = ContextCompat.getColor(context, android.R.attr.textColorPrimary)
         textColor = String.format("#%06x", (0xFFFFFF and color))
-        Log.e("Bonnjalal ", "textColor : $textColor / $color")
 
         isVerticalScrollBarEnabled = true
         isHorizontalScrollBarEnabled = false
@@ -138,35 +136,13 @@ class MathJaxView : WebView {
                 "  text-decoration: none;" +
                 "}\n" +
                 "a:hover {\n" +
-                "  color:RoyalBlue;" +
+                "  color:SteelBlue;" +
                 "  text-decoration: none;" +
                 "}"+
-//                ".int {\n" +
-//                "  position:relative;" +
-//                "  z-index:999;" +
-//                "}"+
-//                ".ext {\n" +
-//                "  position:absolute;" +
-//                "  top:0;" +
-//                "  left:0;" +
-//                "  right:0;" +
-//                "  bottom:0;" +
-//                "  z-index:0;" +
-//                "}\n" +
-//                "      .link {" +
-//                "        position: absolute;" +
-//                "        width: 100%;" +
-//                "        height: 100%;" +
-//                "        top: 0;" +
-//                "        left: 0;" +
-//                "        z-index: 1;" +
-//                "      }" +
                 "</style>"+
                 "</head>\n" //+
 //                "<body>" //+
-//                "<p style=\"text-align:" +
-//                textAlignment.toString().lowercase() +
-//                ";" + "color:" + textColor.toString().uppercase() + ";\">"
+
         val p2 = /*"</p>" +*/ "</body>\n" +
                 "</html>"
         val fullMathText = p1 + text + p2
