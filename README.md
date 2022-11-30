@@ -1,6 +1,6 @@
 # Mathstodon
 
-<img src="/blob/develop/app/src/main/ic_launcher-web.png" width="120" height="120"/>
+<img src="/app/src/main/ic_launcher-web.png" width="120" height="120"/>
 
 Mathstodon is a fork of [Tusky](https://github.com/tuskyapp/Tusky) that suport MathJax/Latex.
 And Tusky is a beautiful Android client for [Mastodon](https://github.com/mastodon/mastodon). Mastodon is an ActivityPub federated social network. That means no single entity controls the whole network, rather, like e-mail, volunteers and organisations operate their own independent servers, users from which can all interact with each other seamlessly.
